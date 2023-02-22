@@ -1,4 +1,5 @@
 from flask import Flask, render_template, url_for
+import pandas as pd
 
 app = Flask(__name__)
 
@@ -16,7 +17,14 @@ def api(station, date):
     :param date: int
     :return: dict
     """
-    temperature = 23
+    # Construct the filepath. The data is stored in the data directory,
+    # a symbolic link to the actual data_small set. Windows and Flask seem to
+    # have problems with relative pathing.
+    path_from_root = "data/"
+    file_stub = "TG_STAID"
+    filepath = path_from_root + file_stub + str(station).zfill(6) + ".txt"
+    df = pd.read_csv(filepath, skiprows=20, parse_dates=["    DATE"])
+    temperature = df.loc[df["    DATE"] == date]["   TG"].squeeze() / 10
     return {"station": station,
             "date" : date,
             "temperature": temperature}
