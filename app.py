@@ -13,7 +13,7 @@ def home():
 
 
 @app.route("/api/v1/<station>/<date>")
-def api(station, date):
+def api_single_temperature(station, date):
     """This view will find the data for the indicated station (by int)
     and return it in in a dictionary.
     :param station: int
@@ -31,6 +31,36 @@ def api(station, date):
     return {"station": station,
             "date" : date,
             "temperature": temperature}
+
+
+@app.route("/api/v1/<station>")
+def api_station_data(station):
+    """This function returns all temperature data collected for the station ID
+    provided.
+    :param station: int (as str)
+    :return: df?
+    """
+    path_from_root = "data/"
+    file_stub = "TG_STAID"
+    filepath = path_from_root + file_stub + str(station).zfill(6) + ".txt"
+    df = pd.read_csv(filepath, skiprows=20, parse_dates=["    DATE"])
+    result = df.to_dict(orient="records")
+    return result
+
+@app.route("/api/v1/annual/<station>/<year>")
+def api_station_year(station, year):
+    """This function returns all temperature data collected for the station ID
+    provided during the year provided.
+    :param station: str
+    :return: df?
+    """
+    path_from_root = "data/"
+    file_stub = "TG_STAID"
+    filepath = path_from_root + file_stub + str(station).zfill(6) + ".txt"
+    df = pd.read_csv(filepath, skiprows=20)
+    df["    DATE"] = df["    DATE"].astype(str)
+    result = df[df["    DATE"].str.startswith(str(year))].to_dict(orient="records")
+    return result
 
 
 if __name__ == "__main__":

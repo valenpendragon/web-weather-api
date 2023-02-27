@@ -6,8 +6,12 @@
 </head>
 <body>
     <h1>Weather Data API</h1>
-    <p>URL format: http://127.0.0.1:5000/api/v1/station/YYYY-MM-DD</p>
+    <p>URL format for single temperature: http://127.0.0.1:5000/api/v1/station/YYYY-MM-DD</p>
     <p>Example: http://127.0.0.1:5000/api/v1/10/1988-10-25</p>
+    <p>URL format for temperatures for all dates: http://127.0.0.1:5000/api/v1/station</p>
+    <p>Example: http://127.0.0.1:5000/api/v1/10</p>
+    <p>URL format for temperatures for a specific year: http://127.0.0.1:5000/api/v1/annual/station/YYYY</p>
+    <p>Example: http://127.0.0.1:5000/api/v1/annual/10/1988</p>
     <p>{{data|safe}}</p>
 </body>
 </html>
